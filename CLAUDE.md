@@ -4,7 +4,7 @@
 
 ## プロジェクト概要
 
-Obsidianプラグイン (仮称: `obsidian-ai-assistant`)。Google Gemini AIを統合し、サイドバーチャット、ナレッジ活用、ファイル操作、チャット保存、インラインテキスト補完を提供する。
+Obsidianプラグイン **GAI in Vault** (`gai-in-vault`)。Google Gemini AIを統合し、サイドバーチャット、ナレッジ活用、ファイル操作、チャット保存、インラインテキスト補完を提供する。
 
 ## 技術スタック
 
@@ -23,7 +23,7 @@ npm run build    # プロダクションビルド (型チェック + minify)
 
 ## Obsidianでのテスト方法
 
-`main.js`, `manifest.json`, `styles.css` をテスト用Vaultの `.obsidian/plugins/obsidian-ai-assistant/` にシンボリックリンクまたはコピーし、Obsidian設定でプラグインを有効化する。開発中の自動リロードには "Hot Reload" コミュニティプラグインを利用。
+`main.js`, `manifest.json`, `styles.css` をテスト用Vaultの `.obsidian/plugins/gai-in-vault/` にシンボリックリンクまたはコピーし、Obsidian設定でプラグインを有効化する。開発中の自動リロードには "Hot Reload" コミュニティプラグインを利用。
 
 ## アーキテクチャ
 
@@ -63,9 +63,9 @@ npm run build    # プロダクションビルド (型チェック + minify)
 ## 開発を進める上での注意点
 - 1コミット1機能を原則とする
 - 機能追加の度にドキュメント類（README.md、 docs/）などを最新に更新する
+- コミットの際は[feat/fix/chore/refactor/docs]などのプレフィックスを先頭につける
 
 ## 言語方針
-
 - ドキュメント (`docs/`, `CLAUDE.md`) は日本語
 - コード中の変数名・コメントは英語
 - コミットメッセージは日本語

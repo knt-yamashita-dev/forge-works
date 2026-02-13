@@ -1,4 +1,4 @@
-# 要件定義書: Obsidian AI Assistant プラグイン
+# 要件定義書: GAI in Vault プラグイン
 
 > 最終更新: 2026-02-13
 > ステータス: ドラフト
@@ -12,7 +12,7 @@ Obsidian上でAIチャット・テキスト補完・ファイル操作を統合�
 ユーザーがVault内のナレッジを活用しながら、AIとの対話を通じてノート作成を効率化することを目指す。
 
 ### 1.2 プラグイン名
-未定 (仮称: `obsidian-ai-assistant`)
+**GAI in Vault** (ID: `gai-in-vault`, アイコン: `sparkles` ✨)
 
 ### 1.3 技術スタック
 
