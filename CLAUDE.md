@@ -31,8 +31,9 @@ npm run build    # プロダクションビルド (型チェック + minify)
 
 - `src/main.ts` — プラグインエントリポイント。ビュー、コマンド、設定、EditorSuggestを登録
 - `src/views/chatView.ts` — ItemViewサブクラス。`this.contentEl` にReactルートをマウント/アンマウント
+- `src/views/filePickerModal.ts` — `FuzzySuggestModal` サブクラス。ナレッジファイル選択用のファジー検索モーダル
 - `src/views/components/` — Reactコンポーネント群。`AppContext.tsx` でObsidianの `App` をReactコンテキストとして提供
-- `src/services/` — ビジネスロジック。`geminiService.ts` (APIストリーミング), `chatService.ts` (セッション/履歴), `fileOperationService.ts` (ファイル作成/編集/追記)
+- `src/services/` — ビジネスロジック。`geminiService.ts` (APIストリーミング), `chatService.ts` (セッション/履歴), `fileOperationService.ts` (ファイル作成/編集/追記), `knowledgeService.ts` (ナレッジファイル読み取り・コンテキスト構築)
 - `src/types/` — 共有TypeScript型定義。`chat.ts` (`ChatMessage`, `ChatSession`), `fileOperation.ts` (`FileOperationRequest`, `FileOperationStatus`)
 - `src/utils/` — `commandParser.ts` (AI応答からファイル操作コマンドを検出・パース・除去), `markdownFormatter.ts` (チャットをMarkdownに変換)
 
@@ -41,6 +42,7 @@ npm run build    # プロダクションビルド (型チェック + minify)
 - **サイドバービュー**: `ItemView` をサブクラス化、`Plugin.registerView()` で登録、`Workspace.getRightLeaf()` で開く
 - **Reactマウント**: `onOpen()` で `createRoot(this.contentEl)`、`onClose()` で `root.unmount()`
 - **ファイル操作**: `Vault.create()`, `Vault.modify()`, `Vault.read()`, `Vault.process()` (アトミックな読み取り→変更→保存)
+- **ファジー検索モーダル**: `FuzzySuggestModal<T>` をサブクラス化。ナレッジファイル選択UIに使用
 - **インライン補完**: `EditorSuggest` をサブクラス化、`Plugin.registerEditorSuggest()` で登録
 - **設定**: `PluginSettingTab` をサブクラス化、`Plugin.loadData()` / `Plugin.saveData()` で永続化
 
@@ -54,7 +56,7 @@ npm run build    # プロダクションビルド (型チェック + minify)
 ## 設計上の決定事項
 
 - AIによるファイル操作は実行前に必ずユーザーの明示的な確認が必要
-- ナレッジファイルはユーザーが手動で選択する方式 (自動ではない)。Geminiプロンプトにコンテキストとして渡す
+- ナレッジファイルはユーザーが手動で選択する方式 (自動ではない)。セッション単位で保持。`FuzzySuggestModal` でファジー検索、Geminiプロンプトにコンテキストとして付加
 - インライン補完はデバウンス制御 (デフォルト500ms) でAPI呼び出しを抑制
 - ストリーミング応答は `generateContentStream()` でチャンク単位のリアルタイム表示
 - 設計ドキュメントと決定記録は `docs/` に保管
