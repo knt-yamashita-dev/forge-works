@@ -32,10 +32,9 @@ npm run build    # プロダクションビルド (型チェック + minify)
 - `src/main.ts` — プラグインエントリポイント。ビュー、コマンド、設定、EditorSuggestを登録
 - `src/views/chatView.ts` — ItemViewサブクラス。`this.contentEl` にReactルートをマウント/アンマウント
 - `src/views/components/` — Reactコンポーネント群。`AppContext.tsx` でObsidianの `App` をReactコンテキストとして提供
-- `src/services/` — ビジネスロジック。`geminiService.ts` (APIストリーミング), `chatService.ts` (セッション/履歴), `knowledgeService.ts` (Vaultファイル読み取り), `fileOperationService.ts` (ファイル作成/編集)
-- `src/completion/inlineCompletionSuggest.ts` — EditorSuggestサブクラス。デバウンス付きAIインライン補完
-- `src/types/` — 共有TypeScript型定義 (`ChatMessage`, `ChatSession`, `FileOperationRequest`, `AIAssistantSettings`)
-- `src/utils/` — `commandParser.ts` (AI応答からファイル操作コマンドを検出), `markdownFormatter.ts` (チャットをMarkdownに変換)
+- `src/services/` — ビジネスロジック。`geminiService.ts` (APIストリーミング), `chatService.ts` (セッション/履歴), `fileOperationService.ts` (ファイル作成/編集/追記)
+- `src/types/` — 共有TypeScript型定義。`chat.ts` (`ChatMessage`, `ChatSession`), `fileOperation.ts` (`FileOperationRequest`, `FileOperationStatus`)
+- `src/utils/` — `commandParser.ts` (AI応答からファイル操作コマンドを検出・パース・除去), `markdownFormatter.ts` (チャットをMarkdownに変換)
 
 ## 主要なObsidian APIパターン
 
