@@ -4,7 +4,7 @@
 
 ## プロジェクト概要
 
-Obsidianプラグイン **GAI in Vault** (`gai-in-vault`)。Google Gemini AIを統合し、サイドバーチャット、ナレッジ活用、ファイル操作、チャット保存、インラインテキスト補完を提供する。
+Obsidianプラグイン **VaultSense** (`vaultsense`)。Google Gemini AIを統合し、サイドバーチャット、ナレッジ活用、ファイル操作、チャット保存、インラインテキスト補完を提供する。
 
 ## 技術スタック
 
@@ -23,7 +23,7 @@ npm run build    # プロダクションビルド (型チェック + minify)
 
 ## Obsidianでのテスト方法
 
-`main.js`, `manifest.json`, `styles.css` をテスト用Vaultの `.obsidian/plugins/gai-in-vault/` にシンボリックリンクまたはコピーし、Obsidian設定でプラグインを有効化する。開発中の自動リロードには "Hot Reload" コミュニティプラグインを利用。
+`main.js`, `manifest.json`, `styles.css` をテスト用Vaultの `.obsidian/plugins/vaultsense/` にシンボリックリンクまたはコピーし、Obsidian設定でプラグインを有効化する。開発中の自動リロードには "Hot Reload" コミュニティプラグインを利用。
 
 ## アーキテクチャ
 
