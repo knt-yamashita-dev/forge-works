@@ -35,6 +35,7 @@ npm run build    # プロダクションビルド (型チェック + minify)
 - `src/views/components/` — Reactコンポーネント群。`AppContext.tsx` でObsidianの `App` をReactコンテキストとして提供
 - `src/services/` — ビジネスロジック。`geminiService.ts` (APIストリーミング), `chatService.ts` (セッション/履歴), `fileOperationService.ts` (ファイル作成/編集/追記), `knowledgeService.ts` (ナレッジファイル読み取り・コンテキスト構築)
 - `src/types/` — 共有TypeScript型定義。`chat.ts` (`ChatMessage`, `ChatSession`), `fileOperation.ts` (`FileOperationRequest`, `FileOperationStatus`)
+- `src/completion/` — `inlineCompletionSuggest.ts` (`EditorSuggest` サブクラス。デバウンス付きAIインライン補完)
 - `src/utils/` — `commandParser.ts` (AI応答からファイル操作コマンドを検出・パース・除去), `markdownFormatter.ts` (チャットをMarkdownに変換)
 
 ## 主要なObsidian APIパターン
@@ -57,7 +58,7 @@ npm run build    # プロダクションビルド (型チェック + minify)
 
 - AIによるファイル操作は実行前に必ずユーザーの明示的な確認が必要
 - ナレッジファイルはユーザーが手動で選択する方式 (自動ではない)。セッション単位で保持。`FuzzySuggestModal` でファジー検索、Geminiプロンプトにコンテキストとして付加
-- インライン補完はデバウンス制御 (デフォルト500ms) でAPI呼び出しを抑制
+- インライン補完はデバウンス制御 (デフォルト500ms) でAPI呼び出しを抑制。コードブロック内や短い行では無効化。`EditorSuggest` の `getSuggestions()` 内でデバウンスPromiseと `AbortController` による二段階キャンセルを実装
 - ストリーミング応答は `generateContentStream()` でチャンク単位のリアルタイム表示
 - 設計ドキュメントと決定記録は `docs/` に保管
 
