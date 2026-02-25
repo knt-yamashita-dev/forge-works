@@ -29,13 +29,13 @@ npm run build    # プロダクションビルド (型チェック + minify)
 
 3層構造: **UI Layer** → **Service Layer** → **Obsidian Platform**
 
-- `src/main.ts` — プラグインエントリポイント。ビュー、コマンド、設定、EditorSuggestを登録
+- `src/main.ts` — プラグインエントリポイント。ビュー、コマンド、設定、EditorExtensionを登録
 - `src/views/chatView.ts` — ItemViewサブクラス。`this.contentEl` にReactルートをマウント/アンマウント
 - `src/views/filePickerModal.ts` — `FuzzySuggestModal` サブクラス。ナレッジファイル選択用のファジー検索モーダル
 - `src/views/components/` — Reactコンポーネント群。`AppContext.tsx` でObsidianの `App` をReactコンテキストとして提供
 - `src/services/` — ビジネスロジック。`geminiService.ts` (APIストリーミング), `chatService.ts` (セッション/履歴), `fileOperationService.ts` (ファイル作成/編集/追記), `knowledgeService.ts` (ナレッジファイル読み取り・コンテキスト構築)
 - `src/types/` — 共有TypeScript型定義。`chat.ts` (`ChatMessage`, `ChatSession`), `fileOperation.ts` (`FileOperationRequest`, `FileOperationStatus`)
-- `src/completion/` — `inlineCompletionSuggest.ts` (`EditorSuggest` サブクラス。デバウンス付きAIインライン補完)
+- `src/completion/` — ゴーストテキストインライン補完。`ghostText.ts` (ViewPluginオーケストレーター), `ghostTextState.ts` (StateField/Effect), `ghostTextWidget.ts` (WidgetType描画), `ghostTextKeymap.ts` (Tab/Esc/Cmd+→), `completionProvider.ts` (GeminiServiceラッパー)
 - `src/utils/` — `commandParser.ts` (AI応答からファイル操作コマンドを検出・パース・除去), `markdownFormatter.ts` (チャットをMarkdownに変換)
 
 ## 主要なObsidian APIパターン
@@ -44,7 +44,7 @@ npm run build    # プロダクションビルド (型チェック + minify)
 - **Reactマウント**: `onOpen()` で `createRoot(this.contentEl)`、`onClose()` で `root.unmount()`
 - **ファイル操作**: `Vault.create()`, `Vault.modify()`, `Vault.read()`, `Vault.process()` (アトミックな読み取り→変更→保存)
 - **ファジー検索モーダル**: `FuzzySuggestModal<T>` をサブクラス化。ナレッジファイル選択UIに使用
-- **インライン補完**: `EditorSuggest` をサブクラス化、`Plugin.registerEditorSuggest()` で登録
+- **インライン補完**: CodeMirror 6 の `ViewPlugin` + `StateField` + `Decoration.widget()` でゴーストテキスト表示。`Plugin.registerEditorExtension()` で登録
 - **設定**: `PluginSettingTab` をサブクラス化、`Plugin.loadData()` / `Plugin.saveData()` で永続化
 
 ## esbuild設定
@@ -58,7 +58,7 @@ npm run build    # プロダクションビルド (型チェック + minify)
 
 - AIによるファイル操作は実行前に必ずユーザーの明示的な確認が必要
 - ナレッジファイルはユーザーが手動で選択する方式 (自動ではない)。セッション単位で保持。`FuzzySuggestModal` でファジー検索、Geminiプロンプトにコンテキストとして付加
-- インライン補完はデバウンス制御 (デフォルト500ms) でAPI呼び出しを抑制。コードブロック内では無効化。`onTrigger()` 内でデバウンスを管理し、入力中は `null` を返してサジェストサイクルを停止。デバウンス完了後にエディタをナッジ (ゼロ幅スペースの挿入＆削除) して `onTrigger()` を再評価させ、`getSuggestions()` が1回だけ呼ばれる方式
+- インライン補完はGitHub Copilot/Cursor風のゴーストテキスト方式。カーソル位置にグレーテキストで補完候補を表示。Tab で全文受け入れ、Esc で破棄、Cmd+→ で単語単位受け入れ。デバウンス制御 (デフォルト500ms)、ストリーミング表示、予測継続キャッシュ (入力がゴーストテキスト先頭と一致すればAPIコールなしで即表示)。コードブロック・フロントマター内では無効化。IME入力中は干渉しない
 - ストリーミング応答は `generateContentStream()` でチャンク単位のリアルタイム表示
 - `__prompt__.md` をVault内の任意のディレクトリに配置すると、システムプロンプトの先頭に追加。ルートの `__prompt__.md` は常に読み込まれる。サブディレクトリの `__prompt__.md` はチャットセッション内で +File / +Folder で明示的に追加したコンテキストのディレクトリにある場合のみ読み込まれる。ファイル変更・作成・削除・リネームを自動検知
 - ウェブ検索はGemini APIの Google Search Grounding (`tools: [{ googleSearch: {} }]`) を利用。追加APIキー不要。設定でオン/オフ切替可能（デフォルト: オフ）。チャット・エージェント両方に適用。検索ソースはメッセージ下部にリンク表示
