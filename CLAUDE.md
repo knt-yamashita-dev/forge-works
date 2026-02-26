@@ -136,13 +136,9 @@ forge-works/src/
 
 ```
 obsidian-plugin/
-├── forge-works/          # 統合プラグイン (メイン)
-├── forge-ai/             # 旧AIプラグイン (非推奨・統合済み)
-├── forge-tasks/          # 旧タスクプラグイン (非推奨・統合済み)
-├── forge-timer/          # 旧タイマープラグイン (非推奨・統合済み)
-├── forge-utils/          # 旧ユーティリティプラグイン (非推奨・統合済み)
+├── forge-works/          # 統合プラグイン
 ├── promotion/            # プロモーションサイト
-├── Makefile              # 全プラグイン統合ビルド
+├── Makefile              # ビルド
 └── CLAUDE.md             # このファイル
 ```
 
