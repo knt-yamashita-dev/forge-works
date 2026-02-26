@@ -1,5 +1,6 @@
 # Build output
 main.js
+!promotion/public/releases/**/main.js
 
 # npm
 node_modules/
