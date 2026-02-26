@@ -2,7 +2,8 @@ PLUGIN_NAME := forge-works
 VAULT_BASE := /Users/yamashita/Library/Mobile Documents/iCloud~md~obsidian/Documents
 VAULT_DIR := $(VAULT_BASE)/vault-default
 PLUGIN_DIR := $(VAULT_DIR)/.obsidian/plugins/$(PLUGIN_NAME)
-SITE_RELEASE_DIR := $(CURDIR)/../promotion/public/releases/$(PLUGIN_NAME)
+PORTFOLIO_DIR ?= /Users/yamashita/Documents/repos/private/portfolio
+SITE_RELEASE_DIR := $(PORTFOLIO_DIR)/public/releases/$(PLUGIN_NAME)
 
 ALL_VAULTS := vault-default vault-ssi
 

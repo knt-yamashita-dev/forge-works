@@ -23,7 +23,6 @@ Obsidianプラグイン **Forge Works** (`forge-works`)。4つの機能モジュ
 ## ビルドコマンド
 
 ```bash
-cd forge-works
 npm run dev      # ウォッチモード (インラインソースマップ付き)
 npm run build    # プロダクションビルド (型チェック + minify)
 ```
@@ -31,15 +30,15 @@ npm run build    # プロダクションビルド (型チェック + minify)
 または Makefile 経由:
 
 ```bash
-make forge-works        # ビルド
-make forge-works-dev    # ウォッチモード
+make build    # ビルド
+make dev      # ウォッチモード
 ```
 
-出力: `forge-works/` に `main.js` (バンドル済みプラグイン), `manifest.json`, `styles.css`
+出力: プロジェクトルートに `main.js` (バンドル済みプラグイン), `manifest.json`, `styles.css`
 
 ## Obsidianでのテスト方法
 
-`forge-works/main.js`, `forge-works/manifest.json`, `forge-works/styles.css` をテスト用Vaultの `.obsidian/plugins/forge-works/` にシンボリックリンクまたはコピーし、Obsidian設定でプラグインを有効化する。開発中の自動リロードには "Hot Reload" コミュニティプラグインを利用。
+`main.js`, `manifest.json`, `styles.css` をテスト用Vaultの `.obsidian/plugins/forge-works/` にシンボリックリンクまたはコピーし、Obsidian設定でプラグインを有効化する。開発中の自動リロードには "Hot Reload" コミュニティプラグインを利用。
 
 ## アーキテクチャ
 
@@ -48,7 +47,7 @@ make forge-works-dev    # ウォッチモード
 モジュラーアーキテクチャ。各モジュールは `ForgeModule` インターフェースを実装し、統合エントリポイントから動的インポートされる。
 
 ```
-forge-works/src/
+src/
 ├── main.ts                    # ForgeWorksPlugin (統合エントリポイント)
 ├── settings/
 │   ├── settings.ts            # ForgeWorksSettings (全モジュール設定を包含)
@@ -135,11 +134,17 @@ forge-works/src/
 ## リポジトリ構成
 
 ```
-obsidian-plugin/
-├── forge-works/          # 統合プラグイン
-├── promotion/            # プロモーションサイト
-├── Makefile              # ビルド
-└── CLAUDE.md             # このファイル
+forge-works/
+├── src/                  # プラグインソースコード
+├── sounds/               # サウンドファイル (WAV)
+├── docs/                 # 設計ドキュメント
+├── Makefile              # ビルド・デプロイ
+├── CLAUDE.md             # このファイル
+├── package.json          # 依存関係
+├── esbuild.config.mjs    # バンドル設定
+├── tsconfig.json         # TypeScript設定
+├── manifest.json         # Obsidianプラグインマニフェスト
+└── styles.css            # 統合CSS (ビルド成果物)
 ```
 
 ## 開発を進める上での注意点
