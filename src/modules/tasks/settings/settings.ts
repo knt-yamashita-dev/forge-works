@@ -17,6 +17,7 @@ export interface ForgeTasksSettings {
 	customStatuses: StatusDefinition[];
 	statusOrder: string[];
 	kanbanVisibleStatuses: string[];
+	templateFolder: string;
 }
 
 export const DEFAULT_SETTINGS: ForgeTasksSettings = {
@@ -35,4 +36,5 @@ export const DEFAULT_SETTINGS: ForgeTasksSettings = {
 	customStatuses: [],
 	statusOrder: [...DEFAULT_STATUS_VALUES],
 	kanbanVisibleStatuses: [...DEFAULT_STATUS_VALUES],
+	templateFolder: "",
 };

@@ -1,8 +1,13 @@
-import { App, Modal, Notice, Setting } from "obsidian";
+import { App, Modal, Notice, Setting, TFile, TFolder } from "obsidian";
 import { TaskService } from "../services/taskService";
 import type { ForgeTasksSettings } from "../settings/settings";
 import type { TaskStatus, TaskPriority, TaskCreateInput } from "../types/task";
 import { getOrderedStatuses } from "../types/task";
+
+function stripFrontmatter(content: string): string {
+	const match = content.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/);
+	return match ? content.slice(match[0].length).trim() : content.trim();
+}
 
 export interface TaskCreateModalOptions {
 	parent?: string;
@@ -22,6 +27,7 @@ export class TaskCreateModal extends Modal {
 	private tags = "";
 	private parent = "";
 	private description = "";
+	private descriptionAreaEl: HTMLTextAreaElement | null = null;
 
 	constructor(
 		app: App,
@@ -55,6 +61,52 @@ export class TaskCreateModal extends Modal {
 				this.title = v;
 			})
 		);
+
+		// Template dropdown (only if templateFolder is configured)
+		const templateFolder = this.settings.templateFolder;
+		if (templateFolder) {
+			const folder =
+				this.app.vault.getAbstractFileByPath(templateFolder);
+			if (folder instanceof TFolder) {
+				const templates = folder.children.filter(
+					(f): f is TFile =>
+						f instanceof TFile && f.extension === "md"
+				);
+				if (templates.length > 0) {
+					new Setting(contentEl)
+						.setName("Template")
+						.addDropdown((dd) => {
+							dd.addOption("", "None");
+							for (const tpl of templates) {
+								dd.addOption(
+									tpl.path,
+									tpl.basename
+								);
+							}
+							dd.onChange(async (path) => {
+								if (!path) {
+									this.description = "";
+									this.updateDescriptionArea();
+									return;
+								}
+								const file =
+									this.app.vault.getAbstractFileByPath(
+										path
+									);
+								if (file instanceof TFile) {
+									const raw =
+										await this.app.vault.read(
+											file
+										);
+									this.description =
+										stripFrontmatter(raw);
+									this.updateDescriptionArea();
+								}
+							});
+						});
+				}
+			}
+		}
 
 		const orderedStatuses = getOrderedStatuses(
 			this.settings.customStatuses,
@@ -123,11 +175,12 @@ export class TaskCreateModal extends Modal {
 					})
 			);
 
-		new Setting(contentEl).setName("Description").addTextArea((text) =>
+		new Setting(contentEl).setName("Description").addTextArea((text) => {
 			text.setPlaceholder("Task description...").onChange((v) => {
 				this.description = v;
-			})
-		);
+			});
+			this.descriptionAreaEl = text.inputEl;
+		});
 
 		new Setting(contentEl).addButton((btn) =>
 			btn
@@ -135,6 +188,12 @@ export class TaskCreateModal extends Modal {
 				.setCta()
 				.onClick(() => this.handleCreate())
 		);
+	}
+
+	private updateDescriptionArea(): void {
+		if (this.descriptionAreaEl) {
+			this.descriptionAreaEl.value = this.description;
+		}
 	}
 
 	private async handleCreate(): Promise<void> {

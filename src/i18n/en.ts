@@ -96,6 +96,9 @@ export const en = {
 	"tasks.customStatuses.add": "Add custom status",
 	"tasks.customStatuses.addBtn": "Add",
 	"tasks.kanban.heading": "Kanban / Matrix Columns",
+	"tasks.templateFolder.name": "Template folder",
+	"tasks.templateFolder.desc":
+		"Folder path containing task template files (.md). Leave empty to disable.",
 	"tasks.kanban.desc":
 		"Choose which statuses appear as columns in Kanban and Matrix views.",
 

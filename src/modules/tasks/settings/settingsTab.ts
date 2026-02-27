@@ -27,6 +27,19 @@ export function renderTasksSettings(
 		);
 
 	new Setting(containerEl)
+		.setName(t("tasks.templateFolder.name"))
+		.setDesc(t("tasks.templateFolder.desc"))
+		.addText((text) =>
+			text
+				.setPlaceholder("Tasks/Templates")
+				.setValue(settings.templateFolder)
+				.onChange(async (value) => {
+					settings.templateFolder = value;
+					await save();
+				})
+		);
+
+	new Setting(containerEl)
 		.setName(t("tasks.priority.name"))
 		.setDesc(t("tasks.priority.desc"))
 		.addDropdown((dropdown) =>

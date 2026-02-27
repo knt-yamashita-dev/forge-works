@@ -99,6 +99,9 @@ export const ja: Record<TranslationKey, string> = {
 	"tasks.customStatuses.add": "カスタムステータスを追加",
 	"tasks.customStatuses.addBtn": "追加",
 	"tasks.kanban.heading": "カンバン / マトリックス カラム",
+	"tasks.templateFolder.name": "テンプレートフォルダ",
+	"tasks.templateFolder.desc":
+		"タスクテンプレートファイル(.md)を格納するフォルダパス。空欄で無効。",
 	"tasks.kanban.desc":
 		"カンバンビューとマトリックスビューにカラムとして表示するステータスを選択。",
 
