@@ -1,5 +1,6 @@
 import { Setting } from "obsidian";
 import type { ForgeAISettings } from "./settings";
+import { t } from "../../../i18n";
 
 export function renderAISettings(
 	containerEl: HTMLElement,
@@ -7,8 +8,8 @@ export function renderAISettings(
 	save: () => Promise<void>
 ): void {
 	new Setting(containerEl)
-		.setName("Gemini API Key")
-		.setDesc("Enter your API key from Google AI Studio")
+		.setName(t("ai.apiKey.name"))
+		.setDesc(t("ai.apiKey.desc"))
 		.addText((text) =>
 			text
 				.setPlaceholder("API Key")
@@ -20,8 +21,8 @@ export function renderAISettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Model")
-		.setDesc("Gemini model to use")
+		.setName(t("ai.model.name"))
+		.setDesc(t("ai.model.desc"))
 		.addDropdown((dropdown) =>
 			dropdown
 				.addOption("gemini-2.0-flash", "Gemini 2.0 Flash")
@@ -35,8 +36,8 @@ export function renderAISettings(
 		);
 
 	new Setting(containerEl)
-		.setName("System Prompt")
-		.setDesc("System prompt that defines AI behavior")
+		.setName(t("ai.systemPrompt.name"))
+		.setDesc(t("ai.systemPrompt.desc"))
 		.addTextArea((text) =>
 			text
 				.setValue(settings.systemPrompt)
@@ -47,8 +48,8 @@ export function renderAISettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Chat save folder")
-		.setDesc("Folder path for saving chat files")
+		.setName(t("ai.savePath.name"))
+		.setDesc(t("ai.savePath.desc"))
 		.addText((text) =>
 			text
 				.setPlaceholder("AI Chats")
@@ -60,8 +61,8 @@ export function renderAISettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Confirm file operations")
-		.setDesc("Show confirmation before AI creates or edits files")
+		.setName(t("ai.confirmOps.name"))
+		.setDesc(t("ai.confirmOps.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.confirmFileOperations)
@@ -72,10 +73,8 @@ export function renderAISettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Max knowledge files")
-		.setDesc(
-			"Maximum number of files to attach as context per session"
-		)
+		.setName(t("ai.maxKnowledge.name"))
+		.setDesc(t("ai.maxKnowledge.desc"))
 		.addSlider((slider) =>
 			slider
 				.setLimits(1, 10, 1)
@@ -87,13 +86,11 @@ export function renderAISettings(
 				})
 		);
 
-	containerEl.createEl("h3", { text: "Web Search" });
+	containerEl.createEl("h3", { text: t("ai.webSearch.heading") });
 
 	new Setting(containerEl)
-		.setName("Enable web search")
-		.setDesc(
-			"Allow AI to search the web using Google Search when answering questions. Uses the existing Gemini API key."
-		)
+		.setName(t("ai.webSearch.name"))
+		.setDesc(t("ai.webSearch.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.enableWebSearch)
@@ -103,13 +100,11 @@ export function renderAISettings(
 				})
 		);
 
-	containerEl.createEl("h3", { text: "Inline Completion" });
+	containerEl.createEl("h3", { text: t("ai.completion.heading") });
 
 	new Setting(containerEl)
-		.setName("Enable inline completion")
-		.setDesc(
-			"Show AI-powered text completions while typing in the editor"
-		)
+		.setName(t("ai.completion.enable.name"))
+		.setDesc(t("ai.completion.enable.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.enableInlineCompletion)
@@ -120,10 +115,8 @@ export function renderAISettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Completion delay")
-		.setDesc(
-			"Milliseconds to wait after typing stops before requesting completion (100-2000)"
-		)
+		.setName(t("ai.completion.delay.name"))
+		.setDesc(t("ai.completion.delay.desc"))
 		.addSlider((slider) =>
 			slider
 				.setLimits(100, 2000, 100)
@@ -136,10 +129,8 @@ export function renderAISettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Streaming completion")
-		.setDesc(
-			"Show completion text progressively as it streams from the AI (lower latency)"
-		)
+		.setName(t("ai.completion.streaming.name"))
+		.setDesc(t("ai.completion.streaming.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.completionStreaming)
@@ -149,13 +140,11 @@ export function renderAISettings(
 				})
 		);
 
-	containerEl.createEl("h3", { text: "Agent Mode" });
+	containerEl.createEl("h3", { text: t("ai.agent.heading") });
 
 	new Setting(containerEl)
-		.setName("Enable agent mode")
-		.setDesc(
-			"Allow AI to autonomously execute multi-step tasks with file operations"
-		)
+		.setName(t("ai.agent.enable.name"))
+		.setDesc(t("ai.agent.enable.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.agentMode.enabled)
@@ -166,10 +155,8 @@ export function renderAISettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Max agent steps")
-		.setDesc(
-			"Maximum number of steps the agent can execute in a single task (1-20)"
-		)
+		.setName(t("ai.agent.maxSteps.name"))
+		.setDesc(t("ai.agent.maxSteps.desc"))
 		.addSlider((slider) =>
 			slider
 				.setLimits(1, 20, 1)
@@ -182,10 +169,8 @@ export function renderAISettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Auto-approve file operations")
-		.setDesc(
-			"Automatically execute file operations without confirmation (agent mode only)"
-		)
+		.setName(t("ai.agent.autoApprove.name"))
+		.setDesc(t("ai.agent.autoApprove.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.agentMode.autoApprove)
@@ -196,10 +181,8 @@ export function renderAISettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Pause on error")
-		.setDesc(
-			"Pause agent execution when an error occurs instead of failing completely"
-		)
+		.setName(t("ai.agent.pauseOnError.name"))
+		.setDesc(t("ai.agent.pauseOnError.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.agentMode.pauseOnError)
@@ -210,10 +193,8 @@ export function renderAISettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Max operations per message")
-		.setDesc(
-			"Maximum number of file operations allowed in a single AI response (1-20)"
-		)
+		.setName(t("ai.maxOps.name"))
+		.setDesc(t("ai.maxOps.desc"))
 		.addSlider((slider) =>
 			slider
 				.setLimits(1, 20, 1)

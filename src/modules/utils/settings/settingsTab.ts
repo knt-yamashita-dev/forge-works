@@ -1,6 +1,7 @@
 import { Setting } from "obsidian";
 import type { ForgeUtilsSettings } from "./settings";
 import { formatDate } from "../utils/dateFormatter";
+import { t } from "../../../i18n";
 
 export function renderUtilsSettings(
 	containerEl: HTMLElement,
@@ -11,14 +12,12 @@ export function renderUtilsSettings(
 		cls: "setting-item-description",
 	});
 	const updatePreview = () => {
-		previewEl.textContent = `Preview: ${formatDate(settings.dateFormat)}`;
+		previewEl.textContent = `${t("utils.dateFormat.preview")}: ${formatDate(settings.dateFormat)}`;
 	};
 
 	new Setting(containerEl)
-		.setName("Date format")
-		.setDesc(
-			"Format for @now replacement. Tokens: YYYY, MM, DD, HH, mm, ss"
-		)
+		.setName(t("utils.dateFormat.name"))
+		.setDesc(t("utils.dateFormat.desc"))
 		.addText((text) =>
 			text
 				.setPlaceholder("YYYY-MM-DD HH:mm")
@@ -33,13 +32,11 @@ export function renderUtilsSettings(
 	updatePreview();
 
 	// --- Focus Mode ---
-	containerEl.createEl("h3", { text: "Focus Mode" });
+	containerEl.createEl("h3", { text: t("utils.focusMode.heading") });
 
 	new Setting(containerEl)
-		.setName("Enable Focus Mode")
-		.setDesc(
-			"Dim all paragraphs except the one your cursor is in. Can also be toggled via command palette."
-		)
+		.setName(t("utils.focusMode.enable.name"))
+		.setDesc(t("utils.focusMode.enable.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.focusModeEnabled)
@@ -50,10 +47,8 @@ export function renderUtilsSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Dimmed text opacity")
-		.setDesc(
-			"Opacity for non-focused paragraphs (0.0 = invisible, 1.0 = fully visible)"
-		)
+		.setName(t("utils.focusMode.opacity.name"))
+		.setDesc(t("utils.focusMode.opacity.desc"))
 		.addSlider((slider) =>
 			slider
 				.setLimits(0.05, 1.0, 0.05)
@@ -66,13 +61,13 @@ export function renderUtilsSettings(
 		);
 
 	// --- Floating TOC ---
-	containerEl.createEl("h3", { text: "Floating TOC" });
+	containerEl.createEl("h3", {
+		text: t("utils.floatingToc.heading"),
+	});
 
 	new Setting(containerEl)
-		.setName("Enable Floating TOC")
-		.setDesc(
-			"Show a floating table of contents when scrolling. Headings are highlighted based on current position. Can also be toggled via command palette."
-		)
+		.setName(t("utils.floatingToc.enable.name"))
+		.setDesc(t("utils.floatingToc.enable.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.floatingTocEnabled)
@@ -83,10 +78,8 @@ export function renderUtilsSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Fade delay")
-		.setDesc(
-			"Seconds to wait after scrolling stops before hiding the TOC (1–10)"
-		)
+		.setName(t("utils.floatingToc.fadeDelay.name"))
+		.setDesc(t("utils.floatingToc.fadeDelay.desc"))
 		.addSlider((slider) =>
 			slider
 				.setLimits(1, 10, 1)

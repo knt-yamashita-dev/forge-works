@@ -1,6 +1,7 @@
 import { Setting } from "obsidian";
 import type { PomodoroSettings } from "./settings";
 import type { LogFormat } from "../types/pomodoro";
+import { t } from "../../../i18n";
 
 export function renderTimerSettings(
 	containerEl: HTMLElement,
@@ -8,11 +9,11 @@ export function renderTimerSettings(
 	save: () => Promise<void>
 ): void {
 	// --- Timer ---
-	containerEl.createEl("h3", { text: "Timer" });
+	containerEl.createEl("h3", { text: t("timer.timer.heading") });
 
 	new Setting(containerEl)
-		.setName("Work duration")
-		.setDesc("Focus session length in minutes")
+		.setName(t("timer.workDuration.name"))
+		.setDesc(t("timer.workDuration.desc"))
 		.addSlider((slider) =>
 			slider
 				.setLimits(1, 60, 1)
@@ -25,8 +26,8 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Short break duration")
-		.setDesc("Short break length in minutes")
+		.setName(t("timer.shortBreak.name"))
+		.setDesc(t("timer.shortBreak.desc"))
 		.addSlider((slider) =>
 			slider
 				.setLimits(1, 30, 1)
@@ -39,8 +40,8 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Long break duration")
-		.setDesc("Long break length in minutes")
+		.setName(t("timer.longBreak.name"))
+		.setDesc(t("timer.longBreak.desc"))
 		.addSlider((slider) =>
 			slider
 				.setLimits(1, 60, 1)
@@ -53,8 +54,8 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Pomodoros before long break")
-		.setDesc("Number of work sessions before a long break")
+		.setName(t("timer.pomodorosBeforeLong.name"))
+		.setDesc(t("timer.pomodorosBeforeLong.desc"))
 		.addSlider((slider) =>
 			slider
 				.setLimits(1, 8, 1)
@@ -67,11 +68,11 @@ export function renderTimerSettings(
 		);
 
 	// --- Auto-start ---
-	containerEl.createEl("h3", { text: "Auto-start" });
+	containerEl.createEl("h3", { text: t("timer.autoStart.heading") });
 
 	new Setting(containerEl)
-		.setName("Auto-start break")
-		.setDesc("Automatically start break after work session ends")
+		.setName(t("timer.autoStartBreak.name"))
+		.setDesc(t("timer.autoStartBreak.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.autoStartBreak)
@@ -82,8 +83,8 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Auto-start work")
-		.setDesc("Automatically start work session after break ends")
+		.setName(t("timer.autoStartWork.name"))
+		.setDesc(t("timer.autoStartWork.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.autoStartWork)
@@ -94,11 +95,11 @@ export function renderTimerSettings(
 		);
 
 	// --- Logging ---
-	containerEl.createEl("h3", { text: "Logging" });
+	containerEl.createEl("h3", { text: t("timer.logging.heading") });
 
 	new Setting(containerEl)
-		.setName("Enable logging")
-		.setDesc("Record completed pomodoro sessions")
+		.setName(t("timer.enableLogging.name"))
+		.setDesc(t("timer.enableLogging.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.enableLogging)
@@ -109,10 +110,8 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Ask for work note")
-		.setDesc(
-			"Show a modal to record what you did after each focus session"
-		)
+		.setName(t("timer.workNote.name"))
+		.setDesc(t("timer.workNote.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.enableWorkNote)
@@ -123,8 +122,8 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Log file path")
-		.setDesc("Path for the log file (e.g. Pomodoro/Log.md)")
+		.setName(t("timer.logPath.name"))
+		.setDesc(t("timer.logPath.desc"))
 		.addText((text) =>
 			text
 				.setPlaceholder("Pomodoro/Log.md")
@@ -136,10 +135,8 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Log to daily note")
-		.setDesc(
-			"Append log entries to the daily note instead of the log file"
-		)
+		.setName(t("timer.dailyNote.name"))
+		.setDesc(t("timer.dailyNote.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.logToDailyNote)
@@ -150,12 +147,12 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Log format")
-		.setDesc("Format for log entries")
+		.setName(t("timer.logFormat.name"))
+		.setDesc(t("timer.logFormat.desc"))
 		.addDropdown((dropdown) =>
 			dropdown
-				.addOption("table", "Table")
-				.addOption("list", "List")
+				.addOption("table", t("timer.logFormat.table"))
+				.addOption("list", t("timer.logFormat.list"))
 				.setValue(settings.logFormat)
 				.onChange(async (value) => {
 					settings.logFormat = value as LogFormat;
@@ -164,8 +161,8 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Daily note heading")
-		.setDesc("Heading to append under in the daily note")
+		.setName(t("timer.dailyHeading.name"))
+		.setDesc(t("timer.dailyHeading.desc"))
 		.addText((text) =>
 			text
 				.setPlaceholder("## Pomodoro")
@@ -177,11 +174,11 @@ export function renderTimerSettings(
 		);
 
 	// --- Sound ---
-	containerEl.createEl("h3", { text: "Sound" });
+	containerEl.createEl("h3", { text: t("timer.sound.heading") });
 
 	new Setting(containerEl)
-		.setName("Enable sound")
-		.setDesc("Play a sound when a phase completes")
+		.setName(t("timer.enableSound.name"))
+		.setDesc(t("timer.enableSound.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.enableSound)
@@ -192,8 +189,8 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Work end sound")
-		.setDesc("Play sound when a focus session ends")
+		.setName(t("timer.soundWorkEnd.name"))
+		.setDesc(t("timer.soundWorkEnd.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.soundWorkEnd)
@@ -204,8 +201,8 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Break end sound")
-		.setDesc("Play sound when a break ends")
+		.setName(t("timer.soundBreakEnd.name"))
+		.setDesc(t("timer.soundBreakEnd.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.soundBreakEnd)
@@ -216,8 +213,8 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Volume")
-		.setDesc("Sound volume (0-100)")
+		.setName(t("timer.volume.name"))
+		.setDesc(t("timer.volume.desc"))
 		.addSlider((slider) =>
 			slider
 				.setLimits(0, 100, 5)
@@ -230,11 +227,11 @@ export function renderTimerSettings(
 		);
 
 	// --- Notifications ---
-	containerEl.createEl("h3", { text: "Notifications" });
+	containerEl.createEl("h3", { text: t("timer.notifications.heading") });
 
 	new Setting(containerEl)
-		.setName("Show notice")
-		.setDesc("Show an Obsidian notice when a phase completes")
+		.setName(t("timer.notice.name"))
+		.setDesc(t("timer.notice.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.enableNotice)
@@ -245,10 +242,8 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("System notification")
-		.setDesc(
-			"Send an OS-level notification when a phase completes. Visible even when Obsidian is not focused."
-		)
+		.setName(t("timer.systemNotification.name"))
+		.setDesc(t("timer.systemNotification.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.enableSystemNotification)
@@ -259,11 +254,11 @@ export function renderTimerSettings(
 		);
 
 	// --- Task ---
-	containerEl.createEl("h3", { text: "Task" });
+	containerEl.createEl("h3", { text: t("timer.task.heading") });
 
 	new Setting(containerEl)
-		.setName("Default task")
-		.setDesc("Default task name for new sessions")
+		.setName(t("timer.defaultTask.name"))
+		.setDesc(t("timer.defaultTask.desc"))
 		.addText((text) =>
 			text
 				.setPlaceholder("(empty)")
@@ -275,8 +270,8 @@ export function renderTimerSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Remember last task")
-		.setDesc("Restore the last used task name on plugin load")
+		.setName(t("timer.rememberTask.name"))
+		.setDesc(t("timer.rememberTask.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.rememberLastTask)

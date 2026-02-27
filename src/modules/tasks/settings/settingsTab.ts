@@ -5,6 +5,7 @@ import {
 	getOrderedStatuses,
 } from "../types/task";
 import type { StatusDefinition, TaskPriority } from "../types/task";
+import { t } from "../../../i18n";
 
 export function renderTasksSettings(
 	containerEl: HTMLElement,
@@ -13,8 +14,8 @@ export function renderTasksSettings(
 	redisplay: () => void
 ): void {
 	new Setting(containerEl)
-		.setName("Task folder")
-		.setDesc("Folder path where task files are stored")
+		.setName(t("tasks.folder.name"))
+		.setDesc(t("tasks.folder.desc"))
 		.addText((text) =>
 			text
 				.setPlaceholder("Tasks")
@@ -26,14 +27,14 @@ export function renderTasksSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Default priority")
-		.setDesc("Default priority for new tasks")
+		.setName(t("tasks.priority.name"))
+		.setDesc(t("tasks.priority.desc"))
 		.addDropdown((dropdown) =>
 			dropdown
-				.addOption("low", "Low")
-				.addOption("medium", "Medium")
-				.addOption("high", "High")
-				.addOption("urgent", "Urgent")
+				.addOption("low", t("tasks.priority.low"))
+				.addOption("medium", t("tasks.priority.medium"))
+				.addOption("high", t("tasks.priority.high"))
+				.addOption("urgent", t("tasks.priority.urgent"))
 				.setValue(settings.defaultPriority)
 				.onChange(async (value) => {
 					settings.defaultPriority = value as TaskPriority;
@@ -48,8 +49,8 @@ export function renderTasksSettings(
 	);
 
 	new Setting(containerEl)
-		.setName("Default status")
-		.setDesc("Default status for new tasks")
+		.setName(t("tasks.status.name"))
+		.setDesc(t("tasks.status.desc"))
 		.addDropdown((dropdown) => {
 			for (const s of orderedStatuses) {
 				dropdown.addOption(s.value, s.label);
@@ -63,8 +64,8 @@ export function renderTasksSettings(
 		});
 
 	new Setting(containerEl)
-		.setName("Default project")
-		.setDesc("Default project for new tasks (empty = none)")
+		.setName(t("tasks.project.name"))
+		.setDesc(t("tasks.project.desc"))
 		.addText((text) =>
 			text
 				.setPlaceholder("Project name")
@@ -76,10 +77,8 @@ export function renderTasksSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Default tags")
-		.setDesc(
-			"Default tags for new tasks, comma-separated (empty = none)"
-		)
+		.setName(t("tasks.tags.name"))
+		.setDesc(t("tasks.tags.desc"))
 		.addText((text) =>
 			text
 				.setPlaceholder("work, daily")
@@ -91,8 +90,8 @@ export function renderTasksSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Show completed tasks")
-		.setDesc("Show tasks with 'Done' status in the task list")
+		.setName(t("tasks.showCompleted.name"))
+		.setDesc(t("tasks.showCompleted.desc"))
 		.addToggle((toggle) =>
 			toggle
 				.setValue(settings.showCompletedTasks)
@@ -103,10 +102,8 @@ export function renderTasksSettings(
 		);
 
 	new Setting(containerEl)
-		.setName("Completed task retention (days)")
-		.setDesc(
-			"Hide completed tasks older than this many days (0 = never hide)"
-		)
+		.setName(t("tasks.retention.name"))
+		.setDesc(t("tasks.retention.desc"))
 		.addSlider((slider) =>
 			slider
 				.setLimits(0, 90, 1)
@@ -119,13 +116,15 @@ export function renderTasksSettings(
 		);
 
 	// --- Custom Statuses Section ---
-	containerEl.createEl("h3", { text: "Custom Statuses" });
+	containerEl.createEl("h3", {
+		text: t("tasks.customStatuses.heading"),
+	});
 	renderStatusList(containerEl, settings, save, redisplay);
 
 	// --- Kanban Visible Statuses ---
-	containerEl.createEl("h3", { text: "Kanban / Matrix Columns" });
+	containerEl.createEl("h3", { text: t("tasks.kanban.heading") });
 	containerEl.createEl("p", {
-		text: "Choose which statuses appear as columns in Kanban and Matrix views.",
+		text: t("tasks.kanban.desc"),
 		cls: "setting-item-description",
 	});
 	renderKanbanVisibleStatuses(containerEl, settings, save);
@@ -148,13 +147,17 @@ function renderStatusList(
 		const isDefault = DEFAULT_STATUS_VALUES.includes(s.value);
 		const setting = new Setting(statusListEl)
 			.setName(`${s.icon} ${s.label}`)
-			.setDesc(isDefault ? `${s.value} (built-in)` : s.value);
+			.setDesc(
+				isDefault
+					? `${s.value} ${t("tasks.customStatuses.builtIn")}`
+					: s.value
+			);
 
 		if (i > 0) {
 			setting.addExtraButton((btn) =>
 				btn
 					.setIcon("arrow-up")
-					.setTooltip("Move up")
+					.setTooltip(t("tasks.customStatuses.moveUp"))
 					.onClick(async () => {
 						const order = [...settings.statusOrder];
 						const idx = order.indexOf(s.value);
@@ -175,7 +178,7 @@ function renderStatusList(
 			setting.addExtraButton((btn) =>
 				btn
 					.setIcon("arrow-down")
-					.setTooltip("Move down")
+					.setTooltip(t("tasks.customStatuses.moveDown"))
 					.onClick(async () => {
 						const order = [...settings.statusOrder];
 						const idx = order.indexOf(s.value);
@@ -196,7 +199,7 @@ function renderStatusList(
 			setting.addExtraButton((btn) =>
 				btn
 					.setIcon("trash")
-					.setTooltip("Remove")
+					.setTooltip(t("tasks.customStatuses.remove"))
 					.onClick(async () => {
 						settings.customStatuses =
 							settings.customStatuses.filter(
@@ -223,7 +226,7 @@ function renderStatusList(
 	let newIcon = "\u25a1";
 
 	new Setting(statusListEl)
-		.setName("Add custom status")
+		.setName(t("tasks.customStatuses.add"))
 		.addText((text) =>
 			text.setPlaceholder("value (kebab-case)").onChange((v) => {
 				newValue = v;
@@ -244,7 +247,7 @@ function renderStatusList(
 		)
 		.addButton((btn) =>
 			btn
-				.setButtonText("Add")
+				.setButtonText(t("tasks.customStatuses.addBtn"))
 				.setCta()
 				.onClick(async () => {
 					const value = newValue
