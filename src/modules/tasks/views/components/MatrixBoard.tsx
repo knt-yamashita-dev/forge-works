@@ -11,7 +11,8 @@ interface MatrixBoardProps {
 export function MatrixBoard({
 	compact = false,
 }: MatrixBoardProps): React.ReactElement {
-	const { taskService, settings, onUpdateSettings } = useAppContext();
+	const { taskService, settings, onUpdateSettings, onCreateTask } =
+		useAppContext();
 	const [tasks, setTasks] = React.useState<Task[]>([]);
 	const [dragOverCell, setDragOverCell] = React.useState<string | null>(null);
 
@@ -176,6 +177,13 @@ export function MatrixBoard({
 			className={`vt-matrix${compact ? " vt-matrix-compact" : ""}`}
 		>
 			<div className="vt-matrix-toolbar">
+				<button
+					className="vt-matrix-toolbar-button"
+					onClick={onCreateTask}
+					title="Create new task"
+				>
+					+
+				</button>
 				<label className="vt-matrix-toolbar-item">
 					<input
 						type="checkbox"

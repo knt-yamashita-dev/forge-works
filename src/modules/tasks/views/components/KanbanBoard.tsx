@@ -57,7 +57,8 @@ function buildSubGroups(
 export function KanbanBoard({
 	compact = false,
 }: KanbanBoardProps): React.ReactElement {
-	const { taskService, settings, onUpdateSettings } = useAppContext();
+	const { taskService, settings, onUpdateSettings, onCreateTask } =
+		useAppContext();
 	const [tasks, setTasks] = React.useState<Task[]>([]);
 	const [dragOverColumn, setDragOverColumn] = React.useState<string | null>(
 		null
@@ -177,6 +178,13 @@ export function KanbanBoard({
 			className={`vt-kanban${compact ? " vt-kanban-compact" : ""}`}
 		>
 			<div className="vt-kanban-toolbar">
+				<button
+					className="vt-kanban-toolbar-button"
+					onClick={onCreateTask}
+					title="Create new task"
+				>
+					+
+				</button>
 				<label className="vt-kanban-toolbar-item">
 					<input
 						type="checkbox"
