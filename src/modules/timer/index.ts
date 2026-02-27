@@ -162,7 +162,7 @@ export class TimerModule implements ForgeModule {
 	private sendSystemNotification(title: string, body: string): void {
 		if (process.platform === "darwin") {
 			const escaped = body.replace(/"/g, '\\"');
-			const script = `say "${title}" using "Kyoko"\ndisplay dialog "${escaped}" with title "${title}" giving up after 10`;
+			const script = `say "${title}" using "Kyoko"\ndisplay dialog "${escaped}" with title "${title}"`;
 			execFile("osascript", ["-e", script], (err) => {
 				if (err && (err as NodeJS.ErrnoException).code !== "1")
 					console.error(
