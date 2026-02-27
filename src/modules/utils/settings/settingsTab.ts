@@ -64,4 +64,37 @@ export function renderUtilsSettings(
 					await save();
 				})
 		);
+
+	// --- Floating TOC ---
+	containerEl.createEl("h3", { text: "Floating TOC" });
+
+	new Setting(containerEl)
+		.setName("Enable Floating TOC")
+		.setDesc(
+			"Show a floating table of contents when scrolling. Headings are highlighted based on current position. Can also be toggled via command palette."
+		)
+		.addToggle((toggle) =>
+			toggle
+				.setValue(settings.floatingTocEnabled)
+				.onChange(async (value) => {
+					settings.floatingTocEnabled = value;
+					await save();
+				})
+		);
+
+	new Setting(containerEl)
+		.setName("Fade delay")
+		.setDesc(
+			"Seconds to wait after scrolling stops before hiding the TOC (1–10)"
+		)
+		.addSlider((slider) =>
+			slider
+				.setLimits(1, 10, 1)
+				.setValue(settings.floatingTocFadeDelay)
+				.setDynamicTooltip()
+				.onChange(async (value) => {
+					settings.floatingTocFadeDelay = value;
+					await save();
+				})
+		);
 }

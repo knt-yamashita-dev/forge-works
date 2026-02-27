@@ -3,12 +3,14 @@ import type { Extension } from "@codemirror/state";
 import type { ForgeUtilsSettings } from "./settings/settings";
 import { createTimestampReplacer } from "./features/timestampReplacer";
 import { createFocusModeExtension } from "./features/focusMode";
+import { createFloatingTocExtension } from "./features/floatingToc";
 import type { ForgeModule } from "../../types/module";
 
 export class UtilsModule implements ForgeModule {
 	private plugin!: Plugin;
 	settings!: ForgeUtilsSettings;
 	private focusModeExtArray: Extension[] = [];
+	private floatingTocExtArray: Extension[] = [];
 
 	async onload(
 		plugin: Plugin,
@@ -26,13 +28,27 @@ export class UtilsModule implements ForgeModule {
 		plugin.registerEditorExtension(this.focusModeExtArray);
 		this.applyFocusMode();
 
-		// Register toggle command
+		// Register Floating TOC extension (dynamic)
+		plugin.registerEditorExtension(this.floatingTocExtArray);
+		this.applyFloatingToc();
+
+		// Register toggle commands
 		plugin.addCommand({
 			id: "toggle-focus-mode",
 			name: "Toggle Focus Mode",
 			callback: () => {
 				this.settings.focusModeEnabled =
 					!this.settings.focusModeEnabled;
+				(plugin as any).saveSettings();
+			},
+		});
+
+		plugin.addCommand({
+			id: "toggle-floating-toc",
+			name: "Toggle Floating TOC",
+			callback: () => {
+				this.settings.floatingTocEnabled =
+					!this.settings.floatingTocEnabled;
 				(plugin as any).saveSettings();
 			},
 		});
@@ -46,6 +62,7 @@ export class UtilsModule implements ForgeModule {
 
 	onSettingsChange(): void {
 		this.applyFocusMode();
+		this.applyFloatingToc();
 	}
 
 	private applyFocusMode(): void {
@@ -57,6 +74,18 @@ export class UtilsModule implements ForgeModule {
 		this.focusModeExtArray.length = 0;
 		if (this.settings.focusModeEnabled) {
 			this.focusModeExtArray.push(createFocusModeExtension());
+		}
+		this.plugin.app.workspace.updateOptions();
+	}
+
+	private applyFloatingToc(): void {
+		this.floatingTocExtArray.length = 0;
+		if (this.settings.floatingTocEnabled) {
+			this.floatingTocExtArray.push(
+				createFloatingTocExtension(
+					() => this.settings.floatingTocFadeDelay
+				)
+			);
 		}
 		this.plugin.app.workspace.updateOptions();
 	}
